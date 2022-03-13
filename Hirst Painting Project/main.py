@@ -28,10 +28,11 @@ t = Turtle()
 s = Screen()
 s.colormode(255)
 t.penup()
-t.setposition(-250, -250)
+t.hideturtle()
+t.setposition(-225, -225)
 
-for y in range(-250, 250, 50):
-    t.setposition(-250, y)
+for y in range(-225, 275, 50):
+    t.setposition(-225, y)
     for _ in range(10):
         colour = random.choice(colour_list)
         t.dot(20, colour)
