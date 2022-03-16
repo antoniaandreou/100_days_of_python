@@ -24,6 +24,7 @@ def clear_reposotion():
     t.clear()
     t.setposition(0.00, 0.00)
     t.seth(0)
+    t.pendown()
 
 
 # Settings
