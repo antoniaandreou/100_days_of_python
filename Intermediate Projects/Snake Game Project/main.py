@@ -1,6 +1,7 @@
 from turtle import Screen
 import time
 from snake import Snake
+from food import Food
 
 # Settings
 screen = Screen()
@@ -10,6 +11,11 @@ screen.bgcolor("black")
 screen.tracer(0)
 
 snake = Snake()
+food = Food()
+
+print(food.x_coordinate)
+print(food.y_coordinate)
+
 
 screen.listen()
 screen.onkey(snake.up, "Up")
