@@ -16,9 +16,11 @@ Posting the projects from the Udemy course '100 Days of Code: The complete pytho
 - [Hirst Painting Project](https://github.com/antoniaandreou/100_days_of_python/tree/main/Intermediate%20Projects/Hirst%20Painting%20Project)
 - [Turtle Race Graphics Project](https://github.com/antoniaandreou/100_days_of_python/blob/main/Intermediate%20Projects/Turtle%20Race%20Project/main.py)
 
+
 ##### _Object Oriented Programming_
 - [Coffee Machine OOP Project](https://github.com/antoniaandreou/100_days_of_python/tree/main/Intermediate%20Projects/Coffee%20Machine%20OOP%20Project)
 - [Quiz Game OOP Project](https://github.com/antoniaandreou/100_days_of_python/tree/main/Intermediate%20Projects/Quiz%20Game%20OOP%20Project)
+- [Snake Game Project](https://github.com/antoniaandreou/100_days_of_python/tree/main/Intermediate%20Projects/Snake%20Game%20Project)
 
 ***
 ### Beginner Projects \* _written in replit_ \*
