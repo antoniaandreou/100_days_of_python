@@ -1,3 +1,12 @@
+# noinspection PySingleQuotedDocstring
+'''
+Created by: Antonia Andreou
+Created Date: 30th March 2022
+Amended By: Antonia Andreou
+Amended Date: 1st April 2022
+'''
+
+# Modules
 from turtle import Screen
 from snake import Snake
 from food import Food
@@ -21,6 +30,7 @@ screen.onkey(snake.down, "Down")
 screen.onkey(snake.left, "Left")
 screen.onkey(snake.right, "Right")
 
+# MAIN
 score = 0
 game_on = True
 while game_on:
@@ -43,10 +53,8 @@ while game_on:
         score_board.game_over()
 
     # Detection of own body collision
-    for segment in snake.segments:
-        if segment == snake.head:
-            pass
-        elif snake.head.distance(segment) < 10:
+    for segment in snake.segments[1:]:
+        if snake.head.distance(segment) < 10:
             game_on = False
             score_board.game_over()
 
