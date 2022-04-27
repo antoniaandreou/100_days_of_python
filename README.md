@@ -7,6 +7,8 @@ Posting the projects from the Udemy course '100 Days of Code: The complete pytho
 ### Capstone Projects
 - [Blackjack Capstone Project](https://github.com/antoniaandreou/100_days_of_python/tree/main/Capstone%20Projects/Blackjack%20Capstone%20Project)
   - _written in replit_ -- [_Click Here to Play_](https://replit.com/@AntoniaAndreou1/Blackjack-100-days-of-python?v=1)
+- [Turtle Crossing Capstone Project](https://github.com/antoniaandreou/100_days_of_python/tree/main/Capstone%20Projects/Turtle%20Grossing%20Game%20Project)
+  - _written in PyCharm_
  *** 
 ### Intermediate Projects \* _written in PyCharm_ \*
 
