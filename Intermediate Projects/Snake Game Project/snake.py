@@ -3,7 +3,7 @@
 Created by: Antonia Andreou
 Created Date: 30th March 2022
 Amended By: Antonia Andreou
-Amended Date: 2nd April 2022
+Amended Date: 17th June 2022
 '''
 
 # Modules
@@ -38,6 +38,8 @@ class Snake:
         makes the snake move forward on screen
     snake_extend:
         increases the elements of the snake by one from its tail
+    snake_reset:
+        move existing segments off the board, clears them and re-initiates the snake
     up:
         changes the snake heading by 90 degrees
     down:
@@ -111,6 +113,18 @@ class Snake:
         y_coordinate = self.tail.ycor()
         positional_extension = (x_coordinate, y_coordinate)
         self.snake_specs(positional_extension)
+
+    def snake_reset(self):
+        """
+        Moves existing segments out of the board, clears and re-initiates the snake.
+        :return: None
+        """
+        for seq in self.segments:
+            seq.goto(1500, 1500)
+        self.segments.clear()
+        self.positions.clear()
+        self.create_snake()
+        self.head = self.segments[0]
 
     def up(self):
         """
