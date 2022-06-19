@@ -51,7 +51,8 @@ class ScoreBoard(Turtle):
         """
         super().__init__()
         self.current_score = 0
-        self.high_score = 0
+        with open('data.txt') as highscore:
+            self.high_score = highscore.read()
 
     def scoreboard_initialization(self):
         """
@@ -75,8 +76,10 @@ class ScoreBoard(Turtle):
         Keeps track of the highest score achieved in the game.
         :return: None
         """
-        if self.current_score > self.high_score:
+        if self.current_score > int(self.high_score):
             self.high_score = self.current_score
+            with open('data.txt', mode='w') as highscore_data:
+                highscore_data.write(str(self.high_score))
 
     def score_increase(self):
         """
