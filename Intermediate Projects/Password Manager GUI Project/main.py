@@ -1,4 +1,7 @@
 from tkinter import *
+from tkinter import messagebox
+import random
+import pyperclip
 
 # ---------------------------- CONSTANTS ------------------------------ #
 BLUE = "#8CC0DE"
@@ -9,14 +12,65 @@ FONT = ("Courier", 16, "bold")
 INPUT_COLOUR = "#2A2550"
 PW_FONT = ("Courier", 12)
 
-# --------------------------- GLOBAL VARIABLES ------------------------- #
-
 
 # ---------------------------- PASSWORD GENERATOR ---------------------- #
 
+
+def password_generator():
+    """
+    Generates a random password with letters, symbols and numbers of a random length between 12 and 18 characters.
+    Copies password to clipboard and autofill the password entry field in the UI.
+    :return: None
+    """
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+               'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    password_list = []
+    [password_list.append(random.choice(letters)) for _ in range(random.randint(8, 10))]  # Letters
+    [password_list.append(random.choice(symbols)) for _ in range(random.randint(2, 4))]   # Symbols
+    [password_list.append(random.choice(numbers)) for _ in range(random.randint(2, 4))]   # Numbers
+    random.shuffle(password_list)
+
+    password_gen = ''.join(password_list)       # Creates the password string
+    pyperclip.copy(password_gen)                # Copies the password on clipboard
+    pw_entry.insert(0, password_gen)            # Inserts the password in the UI entry space
+
+
 # ---------------------------- SAVE PASSWORD --------------------------- #
+
+
 def save():
-    print(password.get())
+    """
+    The function writes the information passed in the UI in a text file.
+    Clears the UI and re-inserts the email ready for next entry.
+    :return: None
+    """
+    # -- Extract variables needed
+    site = web_entry.get()
+    user = email_entry.get()
+    pswrd = pw_entry.get()
+
+    if len(site) == 0 or len(pswrd) == 0 or len(user) == 0:
+        messagebox.showerror(title="Incomplete Fields Error",
+                             message="Ensure there are no empty fields! ")
+    else:
+        is_ok = messagebox.askokcancel(title=f"{site}",
+                                       message=f"Credentials...\nUsername: {user}\n Password: {pswrd}\n"
+                                               f"Save credentials?")
+        if is_ok:
+            with open("data.txt", "a") as file:
+                file.write(f"\n{site} | {user} | {pswrd}")
+
+            entries = [web_entry, email_entry, pw_entry]
+            for _ in entries:
+                _.delete(0, END)
+
+            email_entry.insert(0, "@gmail.com")
+
+            messagebox.showinfo(title="Confirmation", message="Credentials successfully saved")
 
 
 # ---------------------------- UI SETUP -------------------------------- #
@@ -53,19 +107,28 @@ web_entry.focus()
 
 email_entry = Entry(width=37, bg=ORANGE, fg=INPUT_COLOUR, highlightthickness=0, textvariable=username)
 email_entry.grid(column=1, row=2, columnspan=2)
-email_entry.insert(0, "antoniaandreou21@gmail.com")
+email_entry.insert(0, "@gmail.com")
 
 pw_entry = Entry(width=22, bg=ORANGE, fg=INPUT_COLOUR, highlightthickness=0, textvariable=password)
 pw_entry.grid(column=1, row=3)
 
 # -- BUTTON SETUP
-pw_button = Button(width=14, text="Generate Password", font=PW_FONT, bg=PINK, border=0, highlightbackground=BEIGE)
+pw_button = Button(width=14,
+                   text="Generate Password",
+                   font=PW_FONT,
+                   bg=PINK,
+                   border=0,
+                   highlightbackground=BEIGE,
+                   command=password_generator)
 pw_button.grid(column=2, row=3, sticky="N")
 
-add_button = Button(width=43, text="ADD", font=PW_FONT, bg=ORANGE, border=0, highlightbackground=BEIGE)
+add_button = Button(width=43,
+                    text="ADD",
+                    font=PW_FONT,
+                    bg=ORANGE,
+                    border=0,
+                    highlightbackground=BEIGE,
+                    command=save)
 add_button.grid(column=1, row=4, columnspan=2)
-
-save()
-
 
 window.mainloop()
