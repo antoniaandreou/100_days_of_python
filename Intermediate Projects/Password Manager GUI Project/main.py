@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 # ---------------------------- CONSTANTS ------------------------------ #
 BLUE = "#8CC0DE"
@@ -30,13 +31,13 @@ def password_generator():
 
     password_list = []
     [password_list.append(random.choice(letters)) for _ in range(random.randint(8, 10))]  # Letters
-    [password_list.append(random.choice(symbols)) for _ in range(random.randint(2, 4))]   # Symbols
-    [password_list.append(random.choice(numbers)) for _ in range(random.randint(2, 4))]   # Numbers
+    [password_list.append(random.choice(symbols)) for _ in range(random.randint(2, 4))]  # Symbols
+    [password_list.append(random.choice(numbers)) for _ in range(random.randint(2, 4))]  # Numbers
     random.shuffle(password_list)
 
-    password_gen = ''.join(password_list)       # Creates the password string
-    pyperclip.copy(password_gen)                # Copies the password on clipboard
-    pw_entry.insert(0, password_gen)            # Inserts the password in the UI entry space
+    password_gen = ''.join(password_list)  # Creates the password string
+    pyperclip.copy(password_gen)  # Copies the password on clipboard
+    pw_entry.insert(0, password_gen)  # Inserts the password in the UI entry space
 
 
 # ---------------------------- SAVE PASSWORD --------------------------- #
@@ -44,15 +45,20 @@ def password_generator():
 
 def save():
     """
-    The function writes the information passed in the UI in a text file.
+    The function writes the information passed in the UI in a json-=p[[ file.
     Clears the UI and re-inserts the email ready for next entry.
     :return: None
     """
     # -- Extract variables needed
-    site = web_entry.get()
-    user = email_entry.get()
-    pswrd = pw_entry.get()
-
+    site = web_entry.get().lower()
+    user = email_entry.get().lower()
+    pswrd = pw_entry.get().lower()
+    new_entry = {
+        site: {
+            "email": user,
+            "password": pswrd
+        }
+    }
     if len(site) == 0 or len(pswrd) == 0 or len(user) == 0:
         messagebox.showerror(title="Incomplete Fields Error",
                              message="Ensure there are no empty fields! ")
@@ -61,16 +67,51 @@ def save():
                                        message=f"Credentials...\nUsername: {user}\n Password: {pswrd}\n"
                                                f"Save credentials?")
         if is_ok:
-            with open("data.txt", "a") as file:
-                file.write(f"\n{site} | {user} | {pswrd}")
+            try:
+                with open("data.json", "r") as file:
+                    data = json.load(file)
+            except FileNotFoundError:
+                with open("data.json", "w") as file:
+                    json.dump(new_entry, file, indent=4)
+            else:
+                data.update(new_entry)
 
-            entries = [web_entry, email_entry, pw_entry]
-            for _ in entries:
-                _.delete(0, END)
+                with open("data.json", "w") as file:
+                    json.dump(data, file, indent=4)
+            finally:
+                entries = [web_entry, email_entry, pw_entry]
+                for _ in entries:
+                    _.delete(0, END)
 
-            email_entry.insert(0, "@gmail.com")
+                email_entry.insert(0, "antoniaandreou@gmail.com")
+                messagebox.showinfo(title="Confirmation", message="Credentials successfully saved")
 
-            messagebox.showinfo(title="Confirmation", message="Credentials successfully saved")
+
+# ---------------------------- SEARCH PASSWORD ------------------------- #
+def find_password():
+    """
+    The function looks through the json file that stores the passwords and extracts based on the website.
+    :return: None
+    """
+    site = web_entry.get().lower()
+    try:
+        with open("data.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        messagebox.showinfo(title=f"Not Data Found",
+                            message=f"No data file found")
+    else:
+        for key in data:
+            if key == site:
+                email = data[key]["email"]
+                password = data[key]["password"]
+                messagebox.showinfo(title=f"{key.title()}",
+                                    message=f"\nEmail: {email}"
+                                            f"\nPassword: {password}")
+                break
+        else:
+            messagebox.showinfo(title=f"No Entry Found",
+                                message=f"No details for this website exist")
 
 
 # ---------------------------- UI SETUP -------------------------------- #
@@ -101,18 +142,27 @@ web_ref = StringVar()
 username = StringVar()
 password = StringVar()
 
-web_entry = Entry(width=37, bg=ORANGE, fg=INPUT_COLOUR, highlightthickness=0, textvariable=web_ref)
-web_entry.grid(column=1, row=1, columnspan=2)
+web_entry = Entry(width=22, bg=ORANGE, fg=INPUT_COLOUR, highlightthickness=0, textvariable=web_ref)
+web_entry.grid(column=1, row=1)
 web_entry.focus()
 
 email_entry = Entry(width=37, bg=ORANGE, fg=INPUT_COLOUR, highlightthickness=0, textvariable=username)
 email_entry.grid(column=1, row=2, columnspan=2)
-email_entry.insert(0, "@gmail.com")
+email_entry.insert(0, "antoniaandreou@gmail.com")
 
 pw_entry = Entry(width=22, bg=ORANGE, fg=INPUT_COLOUR, highlightthickness=0, textvariable=password)
 pw_entry.grid(column=1, row=3)
 
 # -- BUTTON SETUP
+search_button = Button(width=14,
+                       text="Search",
+                       font=PW_FONT,
+                       bg=ORANGE,
+                       border=0,
+                       highlightbackground=BEIGE,
+                       command=find_password)
+search_button.grid(column=2, row=1, sticky="N")
+
 pw_button = Button(width=14,
                    text="Generate Password",
                    font=PW_FONT,
